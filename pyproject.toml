@@ -12,6 +12,9 @@ license = { file = "LICENSE" }
 authors = [{ name = "SentinelKit contributors" }]
 dependencies = []
 
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
 [project.scripts]
 sentinelkit = "sentinelkit.cli:main"
 
