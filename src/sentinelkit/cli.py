@@ -136,10 +136,12 @@ def cmd_ports(args: argparse.Namespace) -> int:
     print(f"Target: {args.host} ({ip})")
     print("Only use this check on systems you own or are authorized to test.")
     for port in args.ports:
-        sock = socket.socket(socket.AF_INET6 if ":" in ip else socket.AF_INET, socket.SOCK_STREAM)
+        is_ipv6 = ":" in ip
+        sock = socket.socket(socket.AF_INET6 if is_ipv6 else socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(0.6)
         try:
-            result = sock.connect_ex((ip, port))
+            address = (ip, port, 0, 0) if is_ipv6 else (ip, port)
+            result = sock.connect_ex(address)
             state = "OPEN" if result == 0 else "not open / filtered"
             print(f"{port:5}  {state}")
         finally:
